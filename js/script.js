@@ -4,6 +4,13 @@ const loadBtn = () => {
     .then((d) => createBtn(d.data));
 };
 
+
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-US";
+  utterance.rate = 1;
+  window.speechSynthesis.speak(utterance);
+}
 // remove active class
 const removeActiveClass = () => {
   const selectAllBtn = document.querySelectorAll(".lesson-btn");
@@ -110,7 +117,7 @@ const displayWordByLevel = (words) => {
           <p class="text-xl font-medium bangla">"${word.meaning ? word.meaning : "not found"} / ${word.pronunciation}"</p>
           <div class="flex justify-between items-center mx-7">
           <button onclick = "loadWordDetail(${word.id})"  class="btn btn-info"><i class="fa-solid fa-circle-info"></i></button>
-          <button onclick="" class="btn btn-info"><i class="fa-solid fa-volume-high"></i></button>
+          <button onclick="pronounceWord('${word.word}')" class="btn btn-info"><i class="fa-solid fa-volume-high"></i></button>
            
           </div>
         </div>
@@ -135,6 +142,7 @@ const createBtn = (elements) => {
 };
 loadBtn();
 
+// search
 document.getElementById("btn-search").addEventListener("click", () => {
   const inputSearch = document.getElementById("input-search");
   const searchValue = inputSearch.value.trim().toLowerCase();
