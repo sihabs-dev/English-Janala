@@ -1,10 +1,9 @@
 const loadBtn = () => {
   fetch("https://openapi.programming-hero.com/api/levels/all")
     .then((res) => res.json())
-    .then((d) => createBtn(d.data));
+    .then((d) => displayBtn(d.data));
 };
-
-
+// pronounciation
 function pronounceWord(word) {
   const utterance = new SpeechSynthesisUtterance(word);
   utterance.lang = "en-US";
@@ -45,7 +44,6 @@ const loadWordDetail = (id) => {
     .then((res) => res.json())
     .then((data) => displayWordDetail(data.data));
 };
-
 // id: 5;
 // level: 1;
 // meaning: "আগ্রহী";
@@ -56,7 +54,6 @@ const loadWordDetail = (id) => {
 // synonyms: (3)[("enthusiastic", "excited", "keen")];
 // word: "Eager";
 const displayWordDetail = (detail) => {
-  document.getElementById("my_modal_5").showModal();
   const wordDetailCard = document.getElementById("word_detail");
   wordDetailCard.innerHTML = `
               <div>
@@ -75,6 +72,7 @@ const displayWordDetail = (detail) => {
             <p class="space-x-1">${createSynonyms(detail.synonyms)}</p>
           </div>
   `;
+  document.getElementById("my_modal_5").showModal();
 };
 // spinner
 const mannageSpinner = (input) => {
@@ -127,7 +125,7 @@ const displayWordByLevel = (words) => {
   mannageSpinner(false);
 };
 
-const createBtn = (elements) => {
+const displayBtn = (elements) => {
   const getBtnContainer = document.getElementById("level-container");
   getBtnContainer.innerHTML = "";
   elements.forEach((element) => {
@@ -141,8 +139,7 @@ const createBtn = (elements) => {
   });
 };
 loadBtn();
-
-// search
+// search vocabulary
 document.getElementById("btn-search").addEventListener("click", () => {
   const inputSearch = document.getElementById("input-search");
   const searchValue = inputSearch.value.trim().toLowerCase();
