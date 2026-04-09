@@ -8,7 +8,10 @@
 .bangle {
     font-family: "Hind Siliguri", sans-serif;
 }
-
+.active{
+    background-color: #422AD5;
+    color: #fff;
+}
  /* এসাইনমেন্ট-৫, ৫০ মার্ক্সে কাউন্টের জন্য নিচের Keyword ব্যবহার করতে হবে। 
 
 Keyword: [Code For Counting Ass-5 on 50 Marks : (marks50)-ass5#26SR]
