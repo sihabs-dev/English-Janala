@@ -15,6 +15,7 @@ const removeActiveClass = () => {
 
 // load word and display card start
 const loadWordLevel = (id) => {
+  mannageSpinner(true);
   const url = `https://openapi.programming-hero.com/api/level/${id}`;
   fetch(url)
     .then((res) => res.json())
@@ -25,7 +26,62 @@ const loadWordLevel = (id) => {
       displayWordByLevel(data.data);
     });
 };
+// create synonyms
+const createSynonyms = (arr) => {
+  const create = arr.map((synonym) => `<span class='btn'>${synonym}</span>`);
+  return create.join(" ");
+};
+// load word detail
+const loadWordDetail = (id) => {
+  const url = `https://openapi.programming-hero.com/api/word/${id}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => displayWordDetail(data.data));
+};
+
+// id: 5;
+// level: 1;
+// meaning: "আগ্রহী";
+// partsOfSpeech: "adjective";
+// points: 1;
+// pronunciation: "ইগার";
+// sentence: "The kids were eager to open their gifts.";
+// synonyms: (3)[("enthusiastic", "excited", "keen")];
+// word: "Eager";
+const displayWordDetail = (detail) => {
+  document.getElementById("my_modal_5").showModal();
+  const wordDetailCard = document.getElementById("word_detail");
+  wordDetailCard.innerHTML = `
+              <div>
+            <h2 class="text-2xl font-bold">${detail.word} (<i class="fa-solid fa-microphone-lines"></i> :${detail.pronunciation})</h2>
+          </div>
+          <div>
+            <h2 class="text-xl font-medium">Meaning</h2>
+            <p>${detail.meaning}</p>
+          </div>
+          <div>
+            <h2 class="text-xl font-medium">Example</h2>
+            <p>${detail.sentence}</p>
+          </div>
+          <div>
+            <h2 class="text-xl font-medium">সমার্থক শব্দ গুলো</h2>
+            <p class="space-x-1">${createSynonyms(detail.synonyms)}</p>
+          </div>
+  `;
+};
+// spinner
+const mannageSpinner = (input) => {
+  if (input === true) {
+    document.getElementById("spinner").classList.remove("hidden");
+    document.getElementById("card-container").classList.add("hidden");
+  } else {
+    document.getElementById("spinner").classList.add("hidden");
+    document.getElementById("card-container").classList.remove("hidden");
+  }
+};
+
 const displayWordByLevel = (words) => {
+  
   const cardContainer = document.getElementById("card-container");
   cardContainer.innerHTML = "";
   if (words.length === 0) {
@@ -36,8 +92,14 @@ const displayWordByLevel = (words) => {
             নেক্সট Lesson এ যান
           </h3>
         </div>`;
-    // return;
+    mannageSpinner(false);
+    return;
   }
+  //   "id": 5,
+  // "level": 1,
+  // "word": "Eager",
+  // "meaning": "আগ্রহী",
+  // "pronunciation": "ইগার"
   words.forEach((word) => {
     const newDiv = document.createElement("div");
     newDiv.innerHTML = `
@@ -48,16 +110,17 @@ const displayWordByLevel = (words) => {
           <p>Meaning /Pronounciation</p>
           <p class="text-xl font-medium bangla">"${word.meaning ? word.meaning : "not found"} / ${word.pronunciation}"</p>
           <div class="flex justify-between items-center mx-7">
-          <button onclick="my_modal_5.showModal()"  class="btn btn-info"><i class="fa-solid fa-circle-info"></i></button>
-          <button onclick="my_modal_5.showModal()" class="btn btn-info"><i class="fa-solid fa-volume-high"></i></button>
+          <button onclick = "loadWordDetail(${word.id})"  class="btn btn-info"><i class="fa-solid fa-circle-info"></i></button>
+          <button onclick="" class="btn btn-info"><i class="fa-solid fa-volume-high"></i></button>
            
           </div>
         </div>
     `;
     cardContainer.appendChild(newDiv);
   });
+  mannageSpinner(false);
 };
-// load word end
+
 const createBtn = (elements) => {
   const getBtnContainer = document.getElementById("level-container");
   getBtnContainer.innerHTML = "";
