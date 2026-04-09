@@ -81,7 +81,6 @@ const mannageSpinner = (input) => {
 };
 
 const displayWordByLevel = (words) => {
-  
   const cardContainer = document.getElementById("card-container");
   cardContainer.innerHTML = "";
   if (words.length === 0) {
@@ -135,3 +134,19 @@ const createBtn = (elements) => {
   });
 };
 loadBtn();
+
+document.getElementById("btn-search").addEventListener("click", () => {
+  const inputSearch = document.getElementById("input-search");
+  const searchValue = inputSearch.value.trim().toLowerCase();
+  fetch("https://openapi.programming-hero.com/api/words/all")
+    .then((res) => res.json())
+    .then((data) => {
+      const allWords = data.data;
+      const filterWord = allWords.filter((word) => {
+        return word.word.toLowerCase().includes(searchValue);
+      });
+      displayWordByLevel(filterWord);
+      removeActiveClass();
+    });
+  inputSearch.value = "";
+});
